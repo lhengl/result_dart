@@ -212,21 +212,21 @@ Given a success result,
     expect(result.toAsyncResult(), isA<AsyncResult>());
   });
 
-  group('swap', () {
-    test('Success to Error', () {
-      const result = Success<int, String>(0);
-      final swap = result.swap();
-
-      expect(swap.exceptionOrNull(), 0);
-    });
-
-    test('Error to Success', () {
-      const result = Failure<String, int>(0);
-      final swap = result.swap();
-
-      expect(swap.getOrNull(), 0);
-    });
-  });
+  // group('swap', () {
+  //   test('Success to Error', () {
+  //     const result = Success<int, String>(0);
+  //     final swap = result.swap();
+  //
+  //     expect(swap.exceptionOrNull(), 0);
+  //   });
+  //
+  //   test('Error to Success', () {
+  //     const result = Failure<String, int>(0);
+  //     final swap = result.swap();
+  //
+  //     expect(swap.getOrNull(), 0);
+  //   });
+  // });
 
   group('fold', () {
     test('Success', () {

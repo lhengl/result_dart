@@ -6,7 +6,7 @@ extension ResultObjectExtension<W extends Object> on W {
   /// Convert the object to a `Result` type [Failure].
   ///
   /// Will throw an error if used on a `Result` or `Future` instance.
-  Failure<S, W> toFailure<S extends Object>() {
+  Failure<S, W> toFailure<S>() {
     assert(
       this is! Result,
       'Don`t use the "toError()" method '

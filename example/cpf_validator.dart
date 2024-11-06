@@ -1,14 +1,15 @@
+import 'dart:developer' as dev;
 import 'dart:io';
 
 import 'package:result_dart/result_dart.dart';
 
 void main(List<String> args) {
   final result = getTerminalInput() //
-      .map(removeSpecialCharacteres)
+      .map(removeSpecialCharacters)
       .flatMap(parseNumbers)
       .map(validateCPF);
 
-  print('CPF Validator: ${result.isSuccess()}');
+  dev.log('CPF Validator: ${result.isSuccess()}');
 }
 
 Result<String, ValidatorException> getTerminalInput() {
@@ -20,7 +21,7 @@ Result<String, ValidatorException> getTerminalInput() {
   return Result.success(text);
 }
 
-String removeSpecialCharacteres(String input) {
+String removeSpecialCharacters(String input) {
   final reg = RegExp(r'(\D)');
   return input.replaceAll(reg, '');
 }
@@ -31,7 +32,7 @@ Result<List<int>, ValidatorException> parseNumbers(String input) {
   }
 
   try {
-    final list = input.split('').map((e) => int.parse(e)).toList();
+    final list = input.split('').map(int.parse).toList();
     return Result.success(list);
   } catch (e) {
     return const Result.failure(ValidatorException('Parse error'));
@@ -40,13 +41,13 @@ Result<List<int>, ValidatorException> parseNumbers(String input) {
 
 bool validateCPF(List<int> numberDigits) {
   final secondRef = numberDigits.removeLast();
-  final int secondDigit = calculateDigit(numberDigits);
+  final secondDigit = calculateDigit(numberDigits);
   if (secondRef != secondDigit) {
     return false;
   }
 
   final firstRef = numberDigits.removeLast();
-  final int firstDigit = calculateDigit(numberDigits);
+  final firstDigit = calculateDigit(numberDigits);
   return firstRef == firstDigit;
 }
 

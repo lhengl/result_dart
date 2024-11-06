@@ -3,14 +3,14 @@ import 'dart:async';
 import '../result_dart.dart';
 
 /// `AsyncResult<S, E>` represents an asynchronous computation.
-typedef AsyncResult<S extends Object, F extends Object> = Future<Result<S, F>>;
+typedef AsyncResult<S, F extends Object> = Future<Result<S, F>>;
 
 /// `AsyncResult<S, E>` represents an asynchronous computation.
-extension AsyncResultExtension<S extends Object, F extends Object> //
+extension AsyncResultExtension<S, F extends Object> //
     on AsyncResult<S, F> {
   /// Returns a new `Result`, mapping any `Success` value
   /// using the given transformation and unwrapping the produced `Result`.
-  AsyncResult<W, F> flatMap<W extends Object>(
+  AsyncResult<W, F> flatMap<W>(
     FutureOr<Result<W, F>> Function(S success) fn,
   ) {
     return then((result) => result.fold(fn, Failure.new));
@@ -26,7 +26,7 @@ extension AsyncResultExtension<S extends Object, F extends Object> //
 
   /// Returns a new `AsyncResult`, mapping any `Success` value
   /// using the given transformation.
-  AsyncResult<W, F> map<W extends Object>(
+  AsyncResult<W, F> map<W>(
     FutureOr<W> Function(S success) fn,
   ) {
     return then(
@@ -59,7 +59,7 @@ extension AsyncResultExtension<S extends Object, F extends Object> //
   }
 
   /// Change a [Success] value.
-  AsyncResult<W, F> pure<W extends Object>(W success) {
+  AsyncResult<W, F> pure<W>(W success) {
     return then((result) => result.pure(success));
   }
 
@@ -70,9 +70,9 @@ extension AsyncResultExtension<S extends Object, F extends Object> //
 
   /// Swap the values contained inside the [Success] and [Failure]
   /// of this [AsyncResult].
-  AsyncResult<F, S> swap() {
-    return then((result) => result.swap());
-  }
+  // AsyncResult<F, S> swap() {
+  //   return then((result) => result.swap());
+  // }
 
   /// Returns the Future result of onSuccess for the encapsulated value
   /// if this instance represents `Success` or the result of onError function

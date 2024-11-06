@@ -63,21 +63,21 @@ void main() {
     expect(result.exceptionOrNull(), 10);
   });
 
-  group('swap', () {
-    test('Success to Error', () async {
-      final result = const Success<int, String>(0).toAsyncResult();
-      final swap = await result.swap();
-
-      expect(swap.exceptionOrNull(), 0);
-    });
-
-    test('Error to Success', () async {
-      final result = const Failure<String, int>(0).toAsyncResult();
-      final swap = await result.swap();
-
-      expect(swap.getOrNull(), 0);
-    });
-  });
+  // group('swap', () {
+  //   test('Success to Error', () async {
+  //     final result = const Success<int, String>(0).toAsyncResult();
+  //     final swap = await result.swap();
+  //
+  //     expect(swap.exceptionOrNull(), 0);
+  //   });
+  //
+  //   test('Error to Success', () async {
+  //     final result = const Failure<String, int>(0).toAsyncResult();
+  //     final swap = await result.swap();
+  //
+  //     expect(swap.getOrNull(), 0);
+  //   });
+  // });
 
   group('fold', () {
     test('Success', () async {

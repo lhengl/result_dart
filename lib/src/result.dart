@@ -8,7 +8,7 @@ import 'unit.dart' as type_unit;
 /// Receives two values [F] and [S]
 /// as [F] is an error and [S] is a success.
 @sealed
-abstract class Result<S extends Object, F extends Object> {
+abstract class Result<S, F extends Object> {
   /// Build a [Result] that returns a [Failure].
   const factory Result.success(S s) = Success;
 
@@ -62,7 +62,7 @@ abstract class Result<S extends Object, F extends Object> {
 
   /// Returns a new `Result`, mapping any `Success` value
   /// using the given transformation.
-  Result<W, F> map<W extends Object>(W Function(S success) fn);
+  Result<W, F> map<W>(W Function(S success) fn);
 
   /// Returns a new `Result`, mapping any `Error` value
   /// using the given transformation.
@@ -70,7 +70,7 @@ abstract class Result<S extends Object, F extends Object> {
 
   /// Returns a new `Result`, mapping any `Success` value
   /// using the given transformation and unwrapping the produced `Result`.
-  Result<W, F> flatMap<W extends Object>(Result<W, F> Function(S success) fn);
+  Result<W, F> flatMap<W>(Result<W, F> Function(S success) fn);
 
   /// Returns a new `Result`, mapping any `Error` value
   /// using the given transformation and unwrapping the produced `Result`.
@@ -79,7 +79,7 @@ abstract class Result<S extends Object, F extends Object> {
   );
 
   /// Change the [Success] value.
-  Result<W, F> pure<W extends Object>(W success);
+  Result<W, F> pure<W>(W success);
 
   /// Change the [Failure] value.
   Result<S, W> pureError<W extends Object>(W error);
@@ -89,7 +89,7 @@ abstract class Result<S extends Object, F extends Object> {
 
   /// Swap the values contained inside the [Success] and [Failure]
   /// of this [Result].
-  Result<F, S> swap();
+  // Result<F, S> swap();
 
   /// Returns the encapsulated `Result` of the given transform function
   /// applied to the encapsulated a `Failure` or the original
@@ -104,7 +104,7 @@ abstract class Result<S extends Object, F extends Object> {
 /// return it when the result of a [Result] is
 /// the expected value.
 @immutable
-class Success<S extends Object, F extends Object> implements Result<S, F> {
+class Success<S, F extends Object> implements Result<S, F> {
   /// Receives the [S] param as
   /// the successful result.
   const Success(
@@ -150,7 +150,7 @@ class Success<S extends Object, F extends Object> implements Result<S, F> {
   S getOrNull() => _success;
 
   @override
-  Result<W, F> flatMap<W extends Object>(Result<W, F> Function(S success) fn) {
+  Result<W, F> flatMap<W>(Result<W, F> Function(S success) fn) {
     return fn(_success);
   }
 
@@ -161,10 +161,10 @@ class Success<S extends Object, F extends Object> implements Result<S, F> {
     return Success<S, W>(_success);
   }
 
-  @override
-  Result<F, S> swap() {
-    return Failure(_success);
-  }
+  // @override
+  // Result<F, S> swap() {
+  //   return Failure(_success);
+  // }
 
   @override
   S getOrThrow() {
@@ -180,7 +180,7 @@ class Success<S extends Object, F extends Object> implements Result<S, F> {
   S getOrDefault(S defaultValue) => _success;
 
   @override
-  Result<W, F> map<W extends Object>(W Function(S success) fn) {
+  Result<W, F> map<W>(W Function(S success) fn) {
     final newSuccess = fn(_success);
     return Success<W, F>(newSuccess);
   }
@@ -191,7 +191,7 @@ class Success<S extends Object, F extends Object> implements Result<S, F> {
   }
 
   @override
-  Result<W, F> pure<W extends Object>(W success) {
+  Result<W, F> pure<W>(W success) {
     return map((_) => success);
   }
 
@@ -227,7 +227,7 @@ class Success<S extends Object, F extends Object> implements Result<S, F> {
 /// return it when the result of a [Result] is
 /// not the expected value.
 @immutable
-class Failure<S extends Object, F extends Object> implements Result<S, F> {
+class Failure<S, F extends Object> implements Result<S, F> {
   /// Receives the [F] param as
   /// the error result.
   const Failure(this._failure);
@@ -236,7 +236,7 @@ class Failure<S extends Object, F extends Object> implements Result<S, F> {
   /// ```dart
   /// Failure.unit() == Failure(unit)
   /// ```
-  static Failure<S, type_unit.Unit> unit<S extends Object>() {
+  static Failure<S, type_unit.Unit> unit<S>() {
     return Failure<S, type_unit.Unit>(type_unit.unit);
   }
 
@@ -270,7 +270,7 @@ class Failure<S extends Object, F extends Object> implements Result<S, F> {
   S? getOrNull() => null;
 
   @override
-  Result<W, F> flatMap<W extends Object>(Result<W, F> Function(S success) fn) {
+  Result<W, F> flatMap<W>(Result<W, F> Function(S success) fn) {
     return Failure<W, F>(_failure);
   }
 
@@ -281,10 +281,10 @@ class Failure<S extends Object, F extends Object> implements Result<S, F> {
     return fn(_failure);
   }
 
-  @override
-  Result<F, S> swap() {
-    return Success(_failure);
-  }
+  // @override
+  // Result<F, S> swap() {
+  //   return Success(_failure);
+  // }
 
   @override
   S getOrThrow() {
@@ -300,7 +300,7 @@ class Failure<S extends Object, F extends Object> implements Result<S, F> {
   S getOrDefault(S defaultValue) => defaultValue;
 
   @override
-  Result<W, F> map<W extends Object>(W Function(S success) fn) {
+  Result<W, F> map<W>(W Function(S success) fn) {
     return Failure<W, F>(_failure);
   }
 
@@ -311,7 +311,7 @@ class Failure<S extends Object, F extends Object> implements Result<S, F> {
   }
 
   @override
-  Result<W, F> pure<W extends Object>(W success) {
+  Result<W, F> pure<W>(W success) {
     return Failure<W, F>(_failure);
   }
 
